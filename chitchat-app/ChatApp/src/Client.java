@@ -36,7 +36,6 @@ public class Client extends JFrame {
         // Create the top panel
         JPanel paneltop = new JPanel();
         paneltop.setLayout(new FlowLayout());
-        // Color top panel to blue
         paneltop.setBackground(Color.decode("#bbdefb"));
 
         // Input for user name
@@ -105,7 +104,6 @@ public class Client extends JFrame {
         SendMessage sendAction = new SendMessage();
 
         // Set an action listener to call function when button is clicked
-        // Referenced https://stackoverflow.com/questions/4419667/detect-enter-press-in-jtextfield
         buttonSend.addActionListener(sendAction);
         buttonSend.setEnabled(false);
         panelBottom.add(buttonSend);
@@ -138,13 +136,11 @@ public class Client extends JFrame {
                         e1.printStackTrace();
                     }
                 }
-                // Log to the console
                 System.out.println("The client program has been closed");
                 System.exit(0);
             }
         });
 
-        // Show the window
         this.setVisible(true);
     }
 
@@ -171,11 +167,8 @@ public class Client extends JFrame {
 
                     // Listen for server to send closing message
                     if (input.equals("closing")){
-                        // Close the socket
                         socket.close();
-                        // Inform the client that the server has closed their socket via console
                         System.out.println("The server has closed the client socket");
-                        // Exit the chat room window, the server is no longer running! They can't send messages!
                         System.exit(0);
                     }
 
@@ -193,10 +186,8 @@ public class Client extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(connected){
-                // Send the message along with the client name
                 pw.println(textName.getText() + ": " + textField.getText());
                 pw.flush();
-                // Reset the text field to empty
                 textField.setText("");
             }
         }
@@ -212,15 +203,11 @@ public class Client extends JFrame {
                 String IP = "127.0.0.1";
                 int port = 8080;
 
-                // Get the chat room string inputted by the user
                 String chatRoom = textRoom.getText();
-                // Create a new socket for the client
                 socket = new Socket(IP,port);
-                // Send the chat room name to the server
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 out.println(chatRoom);
 
-                // If the client socket is connected
                 if(socket.isConnected()){
                     System.out.println("successfully connected");
                     // Reflect on UI
@@ -232,7 +219,6 @@ public class Client extends JFrame {
                     pw = new PrintWriter(socket.getOutputStream(), true);
                     new ClientReceive().start();
                 }
-                // Catch exceptions recommended by java IDE
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
             } catch (ConnectException e2) {
@@ -253,7 +239,6 @@ public class Client extends JFrame {
                     // inform the server by sending terminate message
                     pw.println("terminate");
                     pw.flush();
-                    // close the socket
                     socket.close();
                     if(socket.isClosed()){
                         // Reflect in UI
